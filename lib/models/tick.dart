@@ -1,23 +1,31 @@
-class TickRes {
+import 'package:equatable/equatable.dart';
+
+class TickRes extends Equatable {
   final Tick tick;
 
-  TickRes({required this.tick});
+  const TickRes({required this.tick});
 
   factory TickRes.fromJson(dynamic json) {
-    return TickRes(tick: json['tick']);
+    return TickRes(tick: Tick.fromJson(json['tick']));
   }
+
+  @override
+  List<Object?> get props => [tick];
 }
 
-class Tick {
+class Tick extends Equatable {
   final double bid;
 
-  Tick({required this.bid});
+  const Tick({required this.bid});
 
   factory Tick.fromJson(dynamic json) {
     return Tick(
-      bid: json['ask'],
+      bid: json['bid'],
     );
   }
+
+  @override
+  List<Object?> get props => [bid];
 }
 // {
 //     "echo_req": {

@@ -1,21 +1,17 @@
-import 'dart:convert';
-
-import 'package:deriv_interview_app/cubits/socket_cubit.dart';
-import 'package:deriv_interview_app/models/market.dart';
+import 'package:deriv_interview_app/cubits/symbols_cubit.dart';
+import 'package:deriv_interview_app/models/market_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MarketsCubit extends Cubit<List<Market>> {
-  MarketsCubit(this.context) : super([]) {
-    occupyList();
+class MarketsCubit extends Cubit<Markets?> {
+  MarketsCubit(this.context) : super(null) {
+    makeMarkets();
   }
+  late Markets markets;
   final BuildContext context;
-
-  void occupyList() {
-    context.read<SocketCubit>().expStream.listen((event) {
-      final decoded = jsonDecode(event);
-      state.addAll(Market.mList(decoded['active_symbols']));
-      emit(state);
-    });
+  void makeMarkets() {
+    final symbols = context.read<SymbolsCubit>().state;
+    markets = Markets.fromSymbols(symbols!);
+    emit(markets);
   }
 }

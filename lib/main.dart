@@ -1,9 +1,20 @@
-import 'package:deriv_interview_app/providers/providers_main.dart';
+import 'package:deriv_interview_app/cubits/market_cubit_select.dart';
+import 'package:deriv_interview_app/cubits/markets_cubit.dart';
+import 'package:deriv_interview_app/cubits/custom_symbols_cubit.dart';
+import 'package:deriv_interview_app/cubits/price_cubit.dart';
+import 'package:deriv_interview_app/cubits/selected_symbol_cubit.dart';
+import 'package:deriv_interview_app/cubits/socket_cubit.dart';
+import 'package:deriv_interview_app/cubits/symbols_cubit.dart';
 import 'package:deriv_interview_app/screens/ticker_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory());
   runApp(
     const Root(
       child: MyApp(),
@@ -17,7 +28,32 @@ class Root extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: providers,
+      providers: [
+        BlocProvider(
+          create: (context) => SocketCubit(),
+        ),
+        BlocProvider(
+          create: (context) => SocketCubit2(),
+        ),
+        BlocProvider(
+          create: (context) => SymbolsCubit(),
+        ),
+        BlocProvider(
+          create: (context) => MarketsCubit(context),
+        ),
+        BlocProvider(
+          create: (context) => MarketCubitSelect(),
+        ),
+        BlocProvider(
+          create: (context) => CustomSymbolsCubit(context),
+        ),
+        BlocProvider(
+          create: (context) => SelectedSymbolCubit(context),
+        ),
+        BlocProvider(
+          create: (context) => PriceCubit(context),
+        ),
+      ],
       child: const MyApp(),
     );
   }

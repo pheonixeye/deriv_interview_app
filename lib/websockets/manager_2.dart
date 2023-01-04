@@ -2,7 +2,7 @@ import 'package:deriv_interview_app/constant/deriv.dart';
 import 'package:web_socket_channel/io.dart';
 
 //singelton class
-class WS {
+class WS2 {
   late IOWebSocketChannel ioWebSocketChannel;
 
   void connect() {
@@ -13,11 +13,11 @@ class WS {
     }
   }
 
-  static final WS _instance = WS._internal();
+  static final WS2 _instance = WS2._internal();
 
-  WS._internal() {
+  WS2._internal() {
     connect();
   }
 
-  factory WS() => _instance;
+  factory WS2() => _instance;
 }

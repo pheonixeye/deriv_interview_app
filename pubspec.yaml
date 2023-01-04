@@ -36,6 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   http:
   flutter_bloc:
+  bloc:
+  hydrated_bloc:
+  path_provider:
   equatable:
   web_socket_channel: ^2.2.0
 
