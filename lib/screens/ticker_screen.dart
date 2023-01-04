@@ -151,30 +151,36 @@ class TickerScreen extends StatelessWidget {
                                 ActiveSymbol?>(
                               builder: (context, selectedSymbol) {
                                 return BlocBuilder<PriceCubit, TickRes?>(
-                                    builder: (context, price) {
-                                  return DropdownButton<ActiveSymbol>(
-                                    itemHeight: 60,
-                                    isExpanded: true,
-                                    underline: Container(
-                                      height: 2,
-                                      color: Colors.blue,
-                                    ),
-                                    alignment: Alignment.center,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down_circle_rounded,
-                                      color: Colors.blue,
-                                    ),
-                                    hint: const Text('Select Symbol . . .'),
-                                    items: _buildItems(),
-                                    onChanged: (value) {
-                                      context
-                                          .read<SelectedSymbolCubit>()
-                                          .selectSymbol(value);
-                                      context.read<PriceCubit>().followPrice();
-                                    },
-                                    value: selectedSymbol,
-                                  );
-                                });
+                                  builder: (context, price) {
+                                    return DropdownButton<ActiveSymbol>(
+                                      itemHeight: 60,
+                                      isExpanded: true,
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.blue,
+                                      ),
+                                      alignment: Alignment.center,
+                                      icon: const Icon(
+                                        Icons.arrow_drop_down_circle_rounded,
+                                        color: Colors.blue,
+                                      ),
+                                      hint: const Text('Select Symbol . . .'),
+                                      items: _buildItems(),
+                                      onChanged: (value) {
+                                        context
+                                            .read<SelectedSymbolCubit>()
+                                            .selectSymbol(value);
+                                        context
+                                            .read<PriceCubit>()
+                                            .unfollowPrice();
+                                        context
+                                            .read<PriceCubit>()
+                                            .followPrice(value!.symbol);
+                                      },
+                                      value: selectedSymbol,
+                                    );
+                                  },
+                                );
                               },
                             );
                           },
@@ -187,12 +193,41 @@ class TickerScreen extends StatelessWidget {
               Expanded(
                 flex: 10,
                 child: Center(
-                  child: BlocBuilder<PriceCubit, TickRes?>(
-                    builder: (context, price) {
-                      while (price == null) {
-                        return const Loading();
-                      }
-                      return Text('${price.tick.bid} ' r'$');
+                  child: Builder(
+                    builder: (context) {
+                      Color color = Colors.grey;
+                      return BlocConsumer<PriceCubit, TickRes?>(
+                        builder: (context, price) {
+                          while (price == null) {
+                            return const Loading();
+                          }
+                          return Text(
+                            '${price.tick.bid} ' r'$',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: color,
+                            ),
+                          );
+                        },
+                        buildWhen: (p, c) {
+                          if (p != null && c != null) {
+                            if (p.tick.bid > c.tick.bid) {
+                              color = Colors.red;
+                              return true;
+                            } else if (p.tick.bid < c.tick.bid) {
+                              color = Colors.green;
+                              return true;
+                            } else {
+                              return false;
+                            }
+                          }
+                          color = Colors.grey;
+                          return true;
+                          // return false;
+                        },
+                        listener: (context, state) {},
+                      );
                     },
                   ),
                 ),

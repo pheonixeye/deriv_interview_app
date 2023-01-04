@@ -3,8 +3,8 @@ import 'package:deriv_interview_app/cubits/markets_cubit.dart';
 import 'package:deriv_interview_app/cubits/custom_symbols_cubit.dart';
 import 'package:deriv_interview_app/cubits/price_cubit.dart';
 import 'package:deriv_interview_app/cubits/selected_symbol_cubit.dart';
-import 'package:deriv_interview_app/cubits/socket_cubit.dart';
 import 'package:deriv_interview_app/cubits/symbols_cubit.dart';
+import 'package:deriv_interview_app/repo/repo_cubit.dart';
 import 'package:deriv_interview_app/screens/ticker_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,10 +30,7 @@ class Root extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => SocketCubit(),
-        ),
-        BlocProvider(
-          create: (context) => SocketCubit2(),
+          create: (context) => RepoCubit(),
         ),
         BlocProvider(
           create: (context) => SymbolsCubit(),

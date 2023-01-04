@@ -9,23 +9,41 @@ class TickRes extends Equatable {
     return TickRes(tick: Tick.fromJson(json['tick']));
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'tick': tick.toJson(),
+    };
+  }
+
   @override
   List<Object?> get props => [tick];
 }
 
 class Tick extends Equatable {
   final double bid;
+  final String id;
 
-  const Tick({required this.bid});
+  const Tick({
+    required this.bid,
+    required this.id,
+  });
 
   factory Tick.fromJson(dynamic json) {
     return Tick(
       bid: json['bid'],
+      id: json['id'],
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'bid': bid,
+      'id': id,
+    };
+  }
+
   @override
-  List<Object?> get props => [bid];
+  List<Object?> get props => [bid, id];
 }
 // {
 //     "echo_req": {
