@@ -32,6 +32,7 @@ class PriceCubit extends HydratedCubit<TickRes?> {
 
   void unfollowPrice() {
     if (state != null) {
+      // repo.state.removeFromStreamController();
       repo.sendRequest(
         {"forget": state!.tick.id},
         RequestType.Forget,
